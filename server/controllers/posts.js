@@ -1,7 +1,6 @@
 import Post from "../models/Post.js";
 import { StatusCodes } from "http-status-codes";
 import User from "../models/User.js";
-import e from "express";
 
 // CREATE
 export const createPost = async (req, res) => {

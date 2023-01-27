@@ -34,10 +34,10 @@ const UserSchema = new mongoose.Schema(
       // Passwords will contain at least 1 lower case letter
       // Passwords will contain at least 1 number or special character
       // There is no length validation (min, max) in this regex!
-      match: [
-        /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-        "Please provide valid password",
-      ],
+      // match: [
+      //   /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+      //   "Please provide valid password",
+      // ],
     },
     picturePath: {
       type: String,
