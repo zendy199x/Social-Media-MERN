@@ -36,7 +36,9 @@ export const register = async (req, res) => {
     const savedUser = await newUser.save();
     res.status(StatusCodes.CREATED).json(savedUser);
   } catch (err) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
   }
 };
 
@@ -49,7 +51,7 @@ export const login = async (req, res) => {
     if (!user) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ msg: "User does not exist" });
+        .json({ message: "User does not exist" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -57,7 +59,7 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ msg: "Invalid credentials" });
+        .json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
@@ -65,6 +67,8 @@ export const login = async (req, res) => {
 
     res.status(StatusCodes.OK).json({ token, user });
   } catch (err) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
   }
 };
