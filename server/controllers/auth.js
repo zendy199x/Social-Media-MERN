@@ -5,7 +5,6 @@ import { StatusCodes } from "http-status-codes";
 
 // REGISTER USER
 export const register = async (req, res) => {
-  console.log(req);
   try {
     const {
       firstName,
@@ -36,6 +35,35 @@ export const register = async (req, res) => {
 
     const savedUser = await newUser.save();
     res.status(StatusCodes.CREATED).json(savedUser);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+  }
+};
+
+// LOGGING IN
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "User does not exist" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    delete user.password;
+
+    res.status(StatusCodes.OK).json({ token, user });
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
   }
