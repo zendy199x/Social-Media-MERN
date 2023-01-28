@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
     });
     await newPost.save();
 
-    const post = await Post.find();
+    const post = await Post.find().sort({ createdAt: -1 });
     res.status(StatusCodes.CREATED).json(post);
   } catch (err) {
     res.status(StatusCodes.CONFLICT).json({ message: err.message });
@@ -30,7 +30,7 @@ export const createPost = async (req, res) => {
 // READ
 export const getFeedPosts = async (req, res) => {
   try {
-    const post = await Post.find();
+    const post = await Post.find().sort({ createdAt: -1 });
     res.status(StatusCodes.OK).json(post);
   } catch (err) {
     res.status(StatusCodes.NOT_FOUND).json({ message: err.message });
@@ -40,7 +40,7 @@ export const getFeedPosts = async (req, res) => {
 export const getUserPosts = async (req, res) => {
   try {
     const { userId } = req.params;
-    const post = await Post.find({ userId });
+    const post = await Post.find({ userId }).sort({ createdAt: -1 });
     res.status(StatusCodes.OK).json(post);
   } catch (err) {
     res.status(StatusCodes.NOT_FOUND).json({ message: err.message });
@@ -53,6 +53,7 @@ export const likePost = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
     const post = await Post.findById(id);
+
     const isLiked = post.likes.get(userId);
 
     if (isLiked) {
@@ -61,12 +62,13 @@ export const likePost = async (req, res) => {
       post.likes.set(userId, true);
     }
 
-    const updatePost = await Post.findByIdAndUpdate(
+    const updatedPost = await Post.findByIdAndUpdate(
       id,
       { likes: post.likes },
       { new: true }
     );
-    res.status(StatusCodes.OK).json(updatePost);
+
+    res.status(StatusCodes.OK).json(updatedPost);
   } catch (err) {
     res.status(StatusCodes.NOT_FOUND).json({ message: err.message });
   }
