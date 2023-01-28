@@ -17,6 +17,9 @@ export const verifyToken = async (req, res, next) => {
     req.user = verified;
     next();
   } catch (err) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    ß;
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
   }
 };
