@@ -57,7 +57,7 @@ const Navbar = () => {
             },
           }}
         >
-          Social Media Network
+          Zendy Social
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
